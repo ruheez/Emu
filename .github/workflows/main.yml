@@ -1,4 +1,5 @@
 
+
 name: Android Emulator Workflow
 
 on: [push]
@@ -15,7 +16,7 @@ jobs:
         run: |
           wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
           unzip ngrok-stable-linux-amd64.zip
-          ./ngrok authtoken $NGROK_AUTH_TOKEN
+          ./ngrok authtoken 2QYwoAcWBJnRdBbzejjYxs008Mz_3pAVcAj1dvxadg2nAhGvp
           ./ngrok tcp 3389 > ngrok.log &
 
       - name: Set up Android Emulator
@@ -30,3 +31,10 @@ jobs:
           while true; do sleep 1; done
 
       # Clean up is not necessary since the workflow will run indefinitely
+
+
+
+
+
+
+
