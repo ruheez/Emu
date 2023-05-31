@@ -1,3 +1,4 @@
+
 name: Android Emulator Workflow
 
 on: [push]
@@ -9,9 +10,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Log in to Docker Hub
-        run: docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Start ngrok
         run: |
@@ -32,6 +30,7 @@ jobs:
           while true; do sleep 1; done
 
       # Clean up is not necessary since the workflow will run indefinitely
+
 
 
 
