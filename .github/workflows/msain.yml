@@ -24,6 +24,9 @@ jobs:
           docker pull secsi/dockerized-android-core-emulator-11.0
           docker run -d --name emulator -e AVD_NAME="pixel" -e PLATFORM_VERSION="11.0" -e ABI="x86" secsi/dockerized-android-core-emulator-11.0
 
+      - name: Install ADB
+        run: sudo apt-get install android-tools-adb
+
       - name: Display ngrok connection URL
         run: |
           echo "Ngrok connection URL:"
