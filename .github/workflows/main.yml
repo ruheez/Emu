@@ -1,0 +1,38 @@
+
+name: Web App Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Start ngrok
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          ./ngrok authtoken 2QYwoAcWBJnRdBbzejjYxs008Mz_3pAVcAj1dvxadg2nAhGvp
+          ./ngrok http 80 > ngrok.log &
+          sleep 10
+
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker.io
+
+      - name: Pull and run Desktop Deluxe
+        run: |
+          docker pull alpine
+          docker run -d -p 8080:8080 --name desktop-deluxe kasmweb/desktop-deluxe
+
+      - name: Display ngrok connection URL
+        run: |
+          echo "Ngrok connection URL:"
+          curl --silent http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
