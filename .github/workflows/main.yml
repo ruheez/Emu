@@ -20,8 +20,8 @@ jobs:
 
       - name: Set up Android Emulator
         run: |
-          docker pull budtmo/docker-android-x86-8.1
-          docker run -d --name emulator -e DEVICE="pixel" -e API=28 -e ABI="x86" budtmo/docker-android-x86-8.1
+          docker pull secsi/dockerized-android-core-emulator-11.0
+          docker run -d --name emulator -e AVD_NAME="pixel" -e PLATFORM_VERSION="11.0" -e ABI="x86" secsi/dockerized-android-core-emulator-11.0
 
       - name: Display ngrok connection URL
         run: |
