@@ -1,0 +1,41 @@
+name: Web App Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+
+      - name: Start ngrok
+        run: |
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip ngrok-stable-linux-amd64.zip
+          ./ngrok authtoken 2QYwoAcWBJnRdBbzejjYxs008Mz_3pAVcAj1dvxadg2nAhGvp
+          ./ngrok http 8080 > ngrok.log &
+          sleep 10
+
+      - name: Pull and run Desktop Deluxe
+        run: |
+          docker pull alpine:latest
+          docker run -d -p 8080:8080 --name desktop-deluxe kasmweb/desktop-deluxe:2.0.0
+
+      - name: Display ngrok connection URL
+        run: |
+          echo "Ngrok connection URL:"
+          curl --silent http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
